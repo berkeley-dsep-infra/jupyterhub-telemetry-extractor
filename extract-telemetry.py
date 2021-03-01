@@ -61,7 +61,7 @@ def main():
                     key=hmac_key,
                     msg=user.encode(),
                     digestmod='sha256'
-                ),
+                ).hexdigest(),
                 "servername": ""
             },
             timestamp_override=timestamp
