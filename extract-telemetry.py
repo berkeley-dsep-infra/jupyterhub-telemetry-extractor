@@ -5,6 +5,8 @@ import sys
 import os
 import pathlib
 import logging
+import secrets
+import hmac
 from jupyter_telemetry.eventlog import EventLog
 
 
@@ -40,6 +42,7 @@ def main():
             logging.StreamHandler()
         ]
     )
+    hmac_key = secrets.token_bytes(32)
     for dirname, _, files in os.walk(pathlib.Path(__file__).parent / "event-schemas"):
         for file in files:
             if not file.endswith('.yaml'):
@@ -54,7 +57,11 @@ def main():
             1,
             {
                 "action": action,
-                "username": user,
+                "username": hmac.new(
+                    key=hmac_key,
+                    msg=user.encode(),
+                    digestmod='sha256'
+                ),
                 "servername": ""
             },
             timestamp_override=timestamp
