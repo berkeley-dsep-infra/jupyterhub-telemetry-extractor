@@ -39,7 +39,7 @@ def main():
             "hub.jupyter.org/server-action"
         ],
         handlers=[
-            logging.StreamHandler()
+            logging.StreamHandler(sys.stdout)
         ]
     )
     hmac_key = secrets.token_bytes(32)
